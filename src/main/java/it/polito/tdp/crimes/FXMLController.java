@@ -38,7 +38,7 @@ public class FXMLController {
     private Button btnAnalisi; // Value injected by FXMLLoader
 
     @FXML // fx:id="boxArco"
-    private ComboBox<?> boxArco; // Value injected by FXMLLoader
+    private ComboBox<Adiacenza> boxArco; // Value injected by FXMLLoader
 
     @FXML // fx:id="btnPercorso"
     private Button btnPercorso; // Value injected by FXMLLoader
@@ -48,11 +48,24 @@ public class FXMLController {
 
     @FXML
     void doCalcolaPercorso(ActionEvent event) {
-
+    	this.txtResult.clear();
+    	Adiacenza arco = this.boxArco.getValue();
+    	if(arco == null) {
+    		this.txtResult.appendText("Seleziona un arco!");
+    		return;
+    	}
+    	
+    	LinkedList<String> percorso = new LinkedList<>(this.model.trovaPercorso(arco.getV1(), arco.getV2()));
+    	this.txtResult.appendText("PERCORSO TRA " +arco.getV1() +" e " +arco.getV2() +": \n\n");
+    	
+    	for(String v: percorso) {
+    		this.txtResult.appendText(v + "\n");
+    	}
     }
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
+    	txtResult.clear();
     	String categoria = this.boxCategoria.getValue();
     	Integer mese = this.boxMese.getValue();
     	
@@ -63,9 +76,12 @@ public class FXMLController {
     	
     	this.model.creaGrafo(categoria, mese);
     	
-    	for(Adiacenza a: this.model.getAdiacenze()) {
+    	LinkedList<Adiacenza> archi = new LinkedList<>(this.model.getAdiacenze());
+    	for(Adiacenza a: archi) {
     		txtResult.appendText(a.toString());
     	}
+    	
+    	this.boxArco.getItems().addAll(archi);
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete

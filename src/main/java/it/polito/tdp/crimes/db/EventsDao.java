@@ -108,7 +108,7 @@ public class EventsDao {
 	}
 	
 	public List<Adiacenza> getArchi(String categoria, int mese){
-		String sql="SELECT DISTINCT e1.offense_type_id as v1, e2.offense_type_id as v2, COUNT(DISTINCT(e1.neighborhood_id))AS peso "
+		String sql="SELECT e1.offense_type_id as v1, e2.offense_type_id as v2, COUNT(DISTINCT(e1.neighborhood_id))AS peso "
 				+ "FROM EVENTS e1, EVENTS e2 "
 				+ "WHERE e1.offense_category_id = ? AND e2.offense_category_id = e1.offense_category_id "
 				+ "	AND MONTH(e1.reported_date) = ? AND MONTH(e2.reported_date) = MONTH(e1.reported_date) "
